@@ -11,8 +11,19 @@ package orders
  * @param logger optional callback invoked with a log message for each product
  */
 fun Order.applyDiscount(
-    discountPercent: Int,
-    logger: ((String) -> Unit)? = null
+    discountPercent: Int, logger: ((String) -> Unit)? = null
 ) {
-    // TODO: apply discount to each product using extension + scoped functions
+    products.forEach { product ->
+        val priceWithDiscount = product.price - product.price * discountPercent / 100
+
+        product.copy(price = priceWithDiscount)
+            .also {
+                discountedProduct ->
+                logger?.invoke("Discount is applied for product with ID = ${discountedProduct.id}. Now it costs ${discountedProduct.price}")
+            }
+            .let { discountedProduct ->
+                this.removeProductById(productId = product.id)
+                this.addProduct(product = discountedProduct)
+            }
+    }
 }
