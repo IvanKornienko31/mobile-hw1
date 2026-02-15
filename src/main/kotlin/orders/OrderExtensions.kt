@@ -11,7 +11,8 @@ package orders
  * @param logger optional callback invoked with a log message for each product
  */
 fun Order.applyDiscount(
-    discountPercent: Int, logger: ((String) -> Unit)? = null
+    discountPercent: Int,
+    logger: ((String) -> Unit)? = null
 ) {
     products.forEach { product ->
         val priceWithDiscount = product.price - product.price * discountPercent / 100
